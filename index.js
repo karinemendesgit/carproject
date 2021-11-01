@@ -67,10 +67,10 @@
         $tdColor.textContent = $('[data-js="color"]').get().value;
 
         $tr.appendChild($tdImage);
-        $tr.appendChild($tdBrand)
-        $tr.appendChild($tdYear)
-        $tr.appendChild($tdPlate)
-        $tr.appendChild($tdColor)
+        $tr.appendChild($tdBrand);
+        $tr.appendChild($tdYear);
+        $tr.appendChild($tdPlate);
+        $tr.appendChild($tdColor);
 
         return $fragment.appendChild($tr);
       },
@@ -79,7 +79,7 @@
         var ajax = new XMLHttpRequest();
         ajax.open('GET', 'company.json', true);
         ajax.send();
-        ajax.addEventListener('readystatechange',this.getCompanyInfo, false)
+        ajax.addEventListener('readystatechange',this.getCompanyInfo, false);
       },
     
       getCompanyInfo: function() {
@@ -93,7 +93,7 @@
       },
 
       isReady: function() {
-        return this.readyState === 4 && this.status === 200
+        return this.readyState === 4 && this.status === 200;
       }
     }
   }  
