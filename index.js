@@ -33,22 +33,22 @@
 
   function app() {
     return {
-      init: function init() {
+      init: function() {
         this.companyInfo()
         this.initEvents()
       },
 
-      initEvents: function initEvents() {
+      initEvents: function() {
         $('[data-js="form-register"]').on('submit', this.handleSubmit);
       },
 
-      handleSubmit: function handleSubmit(e) {
+      handleSubmit: function(e) {
         e.preventDefault();
-        var $tableCar = $('[data-js="table-car"]');
-        $tableCar.get().appendChild(app().createNewCar());
+        var $tableCar = $('[data-js="table-car"]').get();
+        $tableCar.appendChild(app().createNewCar());
       },
 
-      createNewCar: function createNewCar() {
+      createNewCar: function() {
         var $fragment = document.createDocumentFragment();
         var $tr = document.createElement('tr');
         var $tdBrand = document.createElement('td');
@@ -58,7 +58,7 @@
         var $tdImage = document.createElement('td');
         var $image = document.createElement('img');
 
-        $image.setAttribute('src', $('[data-js="image"]').get().value)
+        $image.src = $('[data-js="image"]').get().value;
         $tdImage.appendChild($image);
 
         $tdBrand.textContent = $('[data-js="brand-model"]').get().value;
@@ -75,24 +75,24 @@
         return $fragment.appendChild($tr);
       },
 
-      companyInfo: function companyInfo() {
+      companyInfo: function() {
         var ajax = new XMLHttpRequest();
         ajax.open('GET', 'company.json', true);
         ajax.send();
         ajax.addEventListener('readystatechange',this.getCompanyInfo, false)
       },
     
-      getCompanyInfo: function getCompanyInfo() {
+      getCompanyInfo: function() {
         if(!app().isReady.call(this))
           return;
         var data = JSON.parse(this.responseText);
-        var $companyName = $('[data-js="company-name"]');
-        var $companyPhone = $('[data-js="company-phone"]');
-        $companyName.get().textContent = data.name;
-        $companyPhone.get().textContent = data.phone;
+        var $companyName = $('[data-js="company-name"]').get();
+        var $companyPhone = $('[data-js="company-phone"]').get();
+        $companyName.innerText = data.name;
+        $companyPhone.innerText = data.phone;
       },
 
-      isReady: function isReady() {
+      isReady: function() {
         return this.readyState === 4 && this.status === 200
       }
     }
