@@ -36,6 +36,7 @@
       init: function() {
         this.companyInfo()
         this.initEvents()
+        this.getCars()
       },
 
       initEvents: function() {
@@ -44,8 +45,7 @@
 
       handleSubmit: function(e) {
         e.preventDefault();
-        var $tableCar = $('[data-js="table-car"]').get();
-        $tableCar.appendChild(app().createNewCar());
+        app().postCar;
       },
 
       createNewCar: function() {
@@ -57,20 +57,26 @@
         var $tdColor = document.createElement('td');
         var $tdImage = document.createElement('td');
         var $image = document.createElement('img');
+        var $tdButton = document.createElement('td');
+        var $button = document.createElement('button');
 
         $image.src = $('[data-js="image"]').get().value;
         $tdImage.appendChild($image);
+        $tdButton.appendChild($button);
+        $button.addEventListener('click', this.removeCar, false);
 
         $tdBrand.textContent = $('[data-js="brand-model"]').get().value;
         $tdYear.textContent = $('[data-js="year"]').get().value;
         $tdPlate.textContent = $('[data-js="plate"]').get().value;
         $tdColor.textContent = $('[data-js="color"]').get().value;
+        $button.textContent = 'Remover';
 
         $tr.appendChild($tdImage);
         $tr.appendChild($tdBrand);
         $tr.appendChild($tdYear);
         $tr.appendChild($tdPlate);
         $tr.appendChild($tdColor);
+        $tr.appendChild($tdButton);
 
         return $fragment.appendChild($tr);
       },
@@ -92,8 +98,42 @@
         $companyPhone.innerText = data.phone;
       },
 
+      removeCar: function() {
+        var item = this.parentNode.parentNode.rowIndex;
+        document.querySelector('table').deleteRow(item);
+      },
+
+      getCars: function() {
+        var ajaxGetCar = new XMLHttpRequest();
+        ajaxGetCar.open('GET', 'http://localhost:3000/car', true);
+        ajaxGetCar.send();
+        ajaxGetCar.addEventListener("readystatechange", app.isReadyCar);
+      },
+
+      postCar: function() {
+        var ajaxPostCar = new XMLHttpRequest();
+        var car = {
+          image: $('[data-js="image"]').get().value,
+          brandModel: $('[data-js="brand-model"]').get().value,
+          year: $('[data-js="year"]').get().value,
+          plate: $('[data-js="plate"]').get().value,
+          color: $('[data-js="color"]').get().value
+        }
+        ajaxPostCar.open('POST', 'http://localhost:3000/car', true);
+        ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        ajaxPostCar.send(`image=${car.image}&brandModel=${car.brandModel}&year=${car.year}&plate=${car.plate}&color=${car.color}`);
+        ajaxPostCar.addEventListener("readystatechange", app.isReadyCar);
+      },
+
       isReady: function() {
         return this.readyState === 4 && this.status === 200;
+      },
+
+      isReadyCar:  function() {
+        if (this.readyState === 4 && this.status === 200) {
+          let data = JSON.parse(this.responseText)
+          app().createNewCar(data);
+        }
       }
     }
   }  
