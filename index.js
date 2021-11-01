@@ -57,20 +57,26 @@
         var $tdColor = document.createElement('td');
         var $tdImage = document.createElement('td');
         var $image = document.createElement('img');
+        var $tdButton = document.createElement('td');
+        var $button = document.createElement('button');
 
         $image.src = $('[data-js="image"]').get().value;
         $tdImage.appendChild($image);
+        $tdButton.appendChild($button);
+        $button.addEventListener('click', this.handleRemoveCar, false);
 
         $tdBrand.textContent = $('[data-js="brand-model"]').get().value;
         $tdYear.textContent = $('[data-js="year"]').get().value;
         $tdPlate.textContent = $('[data-js="plate"]').get().value;
         $tdColor.textContent = $('[data-js="color"]').get().value;
+        $button.textContent = 'Remover';
 
         $tr.appendChild($tdImage);
         $tr.appendChild($tdBrand);
         $tr.appendChild($tdYear);
         $tr.appendChild($tdPlate);
         $tr.appendChild($tdColor);
+        $tr.appendChild($tdButton);
 
         return $fragment.appendChild($tr);
       },
@@ -90,6 +96,11 @@
         var $companyPhone = $('[data-js="company-phone"]').get();
         $companyName.innerText = data.name;
         $companyPhone.innerText = data.phone;
+      },
+
+      handleRemoveCar: function() {
+        var item = this.parentNode.parentNode.rowIndex;
+        document.querySelector('table').deleteRow(item);
       },
 
       isReady: function() {
