@@ -45,7 +45,7 @@
 
       handleSubmit: function(e) {
         e.preventDefault();
-        app().postCar;
+        app().postCar();
       },
 
       createNewCar: function() {
@@ -104,14 +104,19 @@
       },
 
       getCars: function() {
-        var ajaxGetCar = new XMLHttpRequest();
-        ajaxGetCar.open('GET', 'http://localhost:3000/car', true);
-        ajaxGetCar.send();
-        ajaxGetCar.addEventListener("readystatechange", app.isReadyCar);
+        var ajax = new XMLHttpRequest();
+        ajax.open('GET', 'http://localhost:3000/car');
+        ajax.send();
+        ajax.onreadystatechange = function() {
+          if (ajax.readyState === 4) {
+            var data = JSON.parse(ajax.responseText);
+            app().createNewCar(data);
+          }
+        };
       },
 
       postCar: function() {
-        var ajaxPostCar = new XMLHttpRequest();
+        var ajax = new XMLHttpRequest();
         var car = {
           image: $('[data-js="image"]').get().value,
           brandModel: $('[data-js="brand-model"]').get().value,
@@ -119,21 +124,18 @@
           plate: $('[data-js="plate"]').get().value,
           color: $('[data-js="color"]').get().value
         }
-        ajaxPostCar.open('POST', 'http://localhost:3000/car', true);
+        ajax.open('POST', 'http://localhost:3000/car');
         ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        ajaxPostCar.send(`image=${car.image}&brandModel=${car.brandModel}&year=${car.year}&plate=${car.plate}&color=${car.color}`);
-        ajaxPostCar.addEventListener("readystatechange", app.isReadyCar);
+        ajax.send(`image=${car.image}&brandModel=${car.brandModel}&year=${car.year}&plate=${car.plate}&color=${car.color}`);
+        ajax.onreadystatechange = function() {
+          if (ajax.readyState === 4) {
+            console.log('Carro cadastrado!', ajax.responseText);
+          }
+        }
       },
 
       isReady: function() {
         return this.readyState === 4 && this.status === 200;
-      },
-
-      isReadyCar:  function() {
-        if (this.readyState === 4 && this.status === 200) {
-          let data = JSON.parse(this.responseText)
-          app().createNewCar(data);
-        }
       }
     }
   }  

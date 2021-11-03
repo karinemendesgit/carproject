@@ -14,7 +14,7 @@ routes.post('/', function (req, res) {
         plate: req.body.plate,
         color: req.body.color
     });
-    res.json('Carro cadastrado com êxito')
+    res.json('Carro cadastrado com êxito', data)
 });
 
 module.exports = routes;
