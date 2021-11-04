@@ -104,13 +104,17 @@
       },
 
       getCars: function() {
+        var $tbody = new DOM('[data-js="table-car"').get()[0];
         var ajax = new XMLHttpRequest();
         ajax.open('GET', 'http://localhost:3000/car');
         ajax.send();
         ajax.onreadystatechange = function() {
           if (ajax.readyState === 4) {
             var data = JSON.parse(ajax.responseText);
-            app().createNewCar(data);
+            if (data.length > 0)
+              data.forEach(item => {
+                $tbody.appendChild(app().createNewCar(item));
+            })
           }
         };
       },
@@ -132,6 +136,14 @@
             console.log('Carro cadastrado!', ajax.responseText);
           }
         }
+      },
+
+      deleteCar: function (item) {
+        var ajax = new XMLHttpRequest();
+        ajax.open('DELETE', 'http://localhost:3000/car');
+        ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        ajax.send({plate: item});
+        window.location.reload()
       },
 
       isReady: function() {
