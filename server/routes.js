@@ -14,7 +14,14 @@ routes.post('/', function (req, res) {
         plate: req.body.plate,
         color: req.body.color
     });
-    res.json('Carro cadastrado com êxito')
+    res.json('Carro cadastrado com êxito', data)
 });
+
+routes.delete('/', function (req, res) {
+    data = data.filter(function (car) {
+        return car.plate !== req.body.plate;
+    });
+    res.json('Carro excluído com êxito')
+})
 
 module.exports = routes;
